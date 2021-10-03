@@ -15,8 +15,26 @@ const home = (req, res) => {
 const about = (req, res) => {
     res.render("about");
 }
+const search = (req, res) => {
+    let { search, from = 0, to = 5 } = req.query;
+    from = Number(from);
+    to = Number(to);
+    if (to == 0) {
+        to = 5;
+    }
+
+    const foundCubes = cubeService.search(search, from, to);
+
+    if (foundCubes.length > 0) {
+        res.render("index", { title: "Search", cubes: foundCubes });
+    } else {
+        res.render("notFound");
+    }
+
+}
 
 router.get("/", home);
 router.get("/about", about);
+router.get("/search", search);
 
 module.exports = router;
