@@ -15,15 +15,11 @@ const createCube = (req, res) => {
 
     res.redirect("/");
 }
-
 const cubeDetails = (req, res) => {
     const theCube = cubeService.getOne(req.params.cubeId);
 
     res.render("details", { ...theCube });
-
-
 }
-
 
 router.get("/create", renderCreate);
 router.post("/create", createCube);

@@ -9,9 +9,7 @@ const home = (req, res) => {
     res.render("index", {
         cubes: cubes
     });
-
 }
-
 const about = (req, res) => {
     res.render("about");
 }
