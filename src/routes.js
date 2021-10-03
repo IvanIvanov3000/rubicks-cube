@@ -8,6 +8,10 @@ const router = express.Router();
 
 router.use("/cube", cubeController);
 router.use(homeController);
+//Error
+router.use("*", (req, res) =>{
+    res.render("404");
+})
 
 
 module.exports = router;
