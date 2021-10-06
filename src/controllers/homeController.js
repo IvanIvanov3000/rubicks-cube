@@ -22,6 +22,7 @@ const search = (req, res) => {
     }
 
     const foundCubes = cubeService.search(search, from, to);
+    console.log(foundCubes);
 
     if (foundCubes.length > 0) {
         res.render("index", { title: "Search", cubes: foundCubes });
