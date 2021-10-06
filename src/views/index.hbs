@@ -4,7 +4,7 @@
     {{else}}
     BROWSER
     {{/if}}
-    </h1>
+  </h1>
   <form action="/search" method="GET">
     <input type="text" class="search" name="search" placeholder="Search...">
     <input type="number" name="from" class="difficulty" placeholder="Difficulty from...">
@@ -13,9 +13,15 @@
     <input type="submit" value="search">
   </form>
   <div class="cubes">
+    {{#if cubes}}
+
     {{#each cubes}}
     {{> cube}}
     {{/each}}
+    
+    {{else}}
+    <p>Nothing found!</p>
+    {{/if}}
   </div>
 
 </main>
