@@ -26,8 +26,11 @@ const cubeDetails = async (req, res) => {
 }
 const addAccessory = async (req, res) => {
     const cube = await cubeService.getOne(req.params.cubeId);
-    const accessories = await accessoryService.getAll();
 
+    const accessories = await accessoryService.getAllWithout(cube.accessories.map(x => x._id));
+    if(accessories == undefined){
+        accessories = [];
+    }
     res.render("cube/attachAccessory", { cube, accessories: accessories });
 }
 const attachAccessory = async (req, res) => {
