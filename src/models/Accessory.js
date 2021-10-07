@@ -1,19 +1,26 @@
 const mongoose = require('mongoose');
+
 const accessoryShema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
-    },
-    imageUrl: {
-        type: String,
-        required: [true, "Image Url is required"],
-        validate: [/^https?:\/\//, "Wrong image format. Image should be an http link"]
+        required: true
     },
     description: {
         type: String,
-        required: [true, "Image Url is required"],
-        maxLength: 50
-    }
+        required: true,
+        maxLength: 100
+    },
+    imageUrl: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (v) {
+                return /^https?:\/\//i.test(v);
+            },
+            message: props => `${props.value} is not a valid url!`
+
+        }
+    },
 });
 
 const Accessory = mongoose.model('Accessory', accessoryShema);
