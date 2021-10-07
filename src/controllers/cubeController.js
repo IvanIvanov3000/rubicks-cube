@@ -7,7 +7,7 @@ const router = express.Router();
 
 const renderCreate = (req, res) => {
 
-    res.render("create");
+    res.render("cube/create");
 }
 const createCube = async (req, res) => {
     try {
