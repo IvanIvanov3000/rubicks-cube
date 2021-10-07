@@ -28,11 +28,17 @@ const addAccessory = async (req, res) => {
     const cube = await cubeService.getOne(req.params.cubeId);
     const accessories = await accessoryService.getAll();
 
-    res.render("cube/attachAccessory", { cube, accessories : accessories });
+    res.render("cube/attachAccessory", { cube, accessories: accessories });
+}
+const attachAccessory = async (req, res) => {
+    console.log(req.params.cubeId, req.body.accessory)
+    await cubeService.attachAccessory(req.params.cubeId, req.body.accessory);
+    res.redirect(`/cube/${req.params.cubeId}`)
 }
 
 router.get("/create", renderCreate);
 router.post("/create", createCube);
 router.get("/:cubeId", cubeDetails);
 router.get("/:cubeId/add-accessory", addAccessory);
+router.post("/:cubeId/add-accessory", attachAccessory);
 module.exports = router;
