@@ -8,10 +8,15 @@ router.get('/create', (req, res) => {
 
     res.render('accessory/create')
 });
-
 router.post('/create', async (req, res) => {
     let { name, description, imageUrl } = req.body;
-     await accessoryService.create({name, description, imageUrl});
+    try{
+        await accessoryService.create(name, description, imageUrl);
+    }
+    catch(err){
+        console.log(err.message);
+    }
+     
 
     res.redirect("/");
 });
