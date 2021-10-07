@@ -15,24 +15,23 @@ const home = async (req, res) => {
 const about = (req, res) => {
     res.render("about");
 }
-const search = (req, res) => {
+const search = async (req, res) => {
     let { search, from = 0, to = 5 } = req.query;
     from = Number(from);
     to = Number(to);
     if (to == 0) {
-        to = 5;
+        to = 6;
     }
-    /*
-    const foundCubes = cubeService.search(search, from, to);
-    console.log(foundCubes);
+
+    const foundCubes = await cubeService.search(search, from, to);
 
     if (foundCubes.length > 0) {
         res.render("index", { title: "Search", cubes: foundCubes });
     } else {
-        res.render("notFound");
+        res.render("index");
     }
-    */
-    res.render("index", {});
+
+    
 
 }
 
