@@ -21,9 +21,8 @@ const createCube = async (req, res) => {
 
 }
 const cubeDetails = async (req, res) => {
-    const theCube = await cubeService.getOne(req.params.cubeId);
-
-    res.render("details", { ...theCube });
+    const { name, description, imageUrl, difficulty } = await cubeService.getOne(req.params.cubeId);
+    res.render("cube/details", { name, description, imageUrl, difficulty });
 }
 
 router.get("/create", renderCreate);
