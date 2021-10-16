@@ -1,8 +1,8 @@
 const express = require('express');
-
+const jwt = require('jsonwebtoken');
 const cubeService = require('../services/cubeService');
 const accessoryService = require('../services/accessoryService');
-
+const SECRET = require("../constants");
 const router = express.Router();
 
 const renderCreate = (req, res) => {
@@ -39,9 +39,16 @@ const attachAccessory = async (req, res) => {
     res.redirect(`/cube/${req.params.cubeId}`)
 }
 const getEditPage = (req, res) => {
+    if (!req.user) {
+        res.redirect("/authorization/login");
+    }
     res.render("cube/edit");
 }
 const getDeletePage = (req, res) => {
+    console.log(req.user);
+    if (!req.user) {
+        res.redirect("/authorization/login");
+    }
     res.render("cube/delete");
 }
 
