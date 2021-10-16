@@ -17,6 +17,10 @@ userSchema.pre("save", async function(next) {
     this.password = newPassword;
     next();
 
+});
+userSchema.static("findByUsername", function (username){
+    return this.find({ username: username})
 })
+
 const User = mongoose.model('User', userSchema);
 module.exports = User;
