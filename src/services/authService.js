@@ -9,31 +9,37 @@ const register = async (username, password) => {
     //return User.create({ username, password: hashedPassoword });
     return User.create({ username, password });
 }
-const login = async (username, password) => {
-    let user = await User.findByUsername(username);
-    user = user[0];
-
-    try {
-        const isValid = await bcrypt.compare(password, user.password);
-
-        if (isValid) {
-            return user;
-        } else {
-            throw { message: "Invalid password" }
-        }
-    } catch (err) {
-        throw { message: err.message }
-    }
+const login = function (username, password) {
+    return User.findByUsername(username)
+        .then(user => Promise.all([user.validatePassword(password), user]))
+        .then(([isValid, user]) => {
+            if (isValid) {
+                return user;
+            } else {
+                throw { message: 'Cannot find username or password'}
+            }
+        })
+        .catch(() => null);
 }
 
-function createToken(user) {
-
+const createToken = function(user) {
     let payload = {
-        username: user.username,
         _id: user._id,
+        username: user.username,
     }
+
     return jwtSign(payload, SECRET);
-}
+
+    // return new Promise((resolve, reject) => {
+    //     jwt.sign(payload, SECRET, function(err, token) {
+    //         if (err) {
+    //             reject(err);
+    //         } else {
+    //             resolve(token);
+    //         }
+    //     })
+    // });
+};
 
 
 

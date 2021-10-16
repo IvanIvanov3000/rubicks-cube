@@ -12,15 +12,30 @@ const userSchema = new mongoose.Schema({
     }
 
 });
-userSchema.pre("save", async function(next) {
-    const newPassword = await bcrypt.hash(this.password, 10);
-    this.password = newPassword;
-    next();
-
+userSchema.pre('save', function(next) {
+    bcrypt.hash(this.password, 10)
+        .then(hash => {
+            this.password = hash;
+            
+            next();
+        });
 });
-userSchema.static("findByUsername", function (username){
-    return this.find({ username: username})
-})
+
+userSchema.static('findByUsername', function(username) {
+    return this.findOne({username});
+});
+
+userSchema.method('validatePassword', function(password) {
+    return bcrypt.compare(password, this.password);
+});
+
+userSchema.virtual('repeatPassword')
+    .set(function(v) {
+        if (v !== this.password) {
+            throw new Error('Password MIssmatch');
+        }
+    });
 
 const User = mongoose.model('User', userSchema);
+
 module.exports = User;
