@@ -39,21 +39,39 @@ const attachAccessory = async (req, res) => {
     await cubeService.attachAccessory(req.params.cubeId, req.body.accessory);
     res.redirect(`/cube/${req.params.cubeId}`)
 }
-const getEditPage = (req, res) => {
-    if (!req.user) {
-        res.redirect("/authorization/login");
-    }
-    res.render("cube/edit");
-}
-const getDeletePage = (req, res) => {
-    res.render("cube/delete");
-}
 
+const getDeletePage = async (req, res) => {
+    let cubeId = req.params.cubeId;
+    let cube = await cubeService.getOne(cubeId)
+
+    res.render("cube/delete", cube);
+}
+const postDeleteCubePage = async (req, res) => {
+    await cubeService.deleteOne(req.params.cubeId);
+    res.redirect(`/`)
+}
+const postEditPage = async (req, res) => {
+
+    let { name, description, imageUrl, difficulty } = req.body;
+    console.log(name, description, imageUrl, difficulty)
+    await cubeService.updateOne(req.params.cubeId, { name, description, imageUrl, difficulty });
+    res.redirect(`/cube/${req.params.cubeId}`)
+}
+const getEditPage = async (req, res) => {
+    const cubeId = req.params.cubeId;
+    const cube = await cubeService.getOne(cubeId);
+    res.render("cube/edit", cube);
+}
 router.get("/create", renderCreate);
-router.post("/create",isAuth, createCube);
+router.post("/create", isAuth, createCube);
 router.get("/:cubeId", cubeDetails);
+
 router.get("/:cubeId/edit", getEditPage);
+router.post("/:cubeId/edit", postEditPage);
+
 router.get("/:cubeId/delete", getDeletePage);
-router.get("/:cubeId/add-accessory",isAuth, addAccessory);
+router.post("/:cubeId/delete", postDeleteCubePage);
+
+router.get("/:cubeId/add-accessory", isAuth, addAccessory);
 router.post("/:cubeId/add-accessory", isAuth, attachAccessory);
 module.exports = router;
