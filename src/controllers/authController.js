@@ -6,16 +6,20 @@ router.get("/login", (req, res) => {
 });
 router.post("/login", async (req, res) => {
     const { username, password } = req.body;
+
     if (username == "" || password == "") {
         res.write(404);
     }
 
-    try{
+    try {
         const user = await authService.login(username, password);
-    }catch(err){
-        res.redirect("/404");
+        const token = await authService.createToken(user);
+        console.log(token);
+    } catch (err) {
+        console.log(err);
+        return res.redirect("/404");
     }
-    res.redirect("/")
+    res.redirect("/");
 
 });
 
@@ -27,12 +31,11 @@ router.post("/register", async (req, res) => {
     let { username, password, repeatPassword } = req.body;
 
     if (password !== repeatPassword) {
-        return alert("Passwords don\`t match!");
+        throw { message: "Passwords dont match" }
     } else if (username == "" || password == "" || repeatPassword == "") {
-        return alert("All fields are required!");
+        throw { message: "All fields are required" };
     }
     await authService.register(username, password);
-
     res.redirect("/authorization/login");
 
 });

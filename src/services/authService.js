@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { SECRET } = require('../constants');
 
 const register = async (username, password) => {
     //console.log('register', username, password);
@@ -17,16 +19,41 @@ const login = async (username, password) => {
         if (isValid) {
             return user;
         } else {
-            throw {message : "Invalid password"}
+            throw { message: "Invalid password" }
         }
     } catch (err) {
         throw { message: err.message }
     }
-
 }
+
+function createToken(user) {
+
+    let payload = {
+        username: user.username,
+        _id: user._id,
+    }
+    return jwtSign(payload, SECRET);
+}
+
+
+
+function jwtSign(payload, secret) {
+    let promise = new Promise((resolve, reject) => {
+        jwt.sign(payload, secret, function (err, token) {
+            if (err) {
+                reject();
+            } else {
+                resolve(token);
+            }
+        })
+    });
+    return promise;
+}
+
 const accessoryService = {
     register,
-    login
+    login,
+    createToken
 };
 
 module.exports = accessoryService;;
