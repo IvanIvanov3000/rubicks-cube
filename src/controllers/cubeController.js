@@ -28,7 +28,7 @@ const addAccessory = async (req, res) => {
     const cube = await cubeService.getOne(req.params.cubeId);
 
     const accessories = await accessoryService.getAllWithout(cube.accessories.map(x => x._id));
-    if(accessories == undefined){
+    if (accessories == undefined) {
         accessories = [];
     }
     res.render("cube/attachAccessory", { cube, accessories: accessories });
@@ -38,10 +38,18 @@ const attachAccessory = async (req, res) => {
     await cubeService.attachAccessory(req.params.cubeId, req.body.accessory);
     res.redirect(`/cube/${req.params.cubeId}`)
 }
+const getEditPage = (req, res) => {
+    res.render("cube/edit");
+}
+const getDeletePage = (req, res) => {
+    res.render("cube/delete");
+}
 
 router.get("/create", renderCreate);
 router.post("/create", createCube);
 router.get("/:cubeId", cubeDetails);
+router.get("/:cubeId/edit", getEditPage);
+router.get("/:cubeId/delete", getDeletePage);
 router.get("/:cubeId/add-accessory", addAccessory);
 router.post("/:cubeId/add-accessory", attachAccessory);
 module.exports = router;
