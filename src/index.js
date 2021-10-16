@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser')
 
 const initHandlebars = require('./config/handlebars');
 const routes = require('./routes');
@@ -11,6 +12,8 @@ const app = express();
 
 initHandlebars(app);
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, './public')));
 
 
