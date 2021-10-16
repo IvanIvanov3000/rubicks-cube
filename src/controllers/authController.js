@@ -22,7 +22,7 @@ router.post("/register", async (req, res) => {
     }
     await authService.register(username, password);
 
-    res.redirect("authorization/login");
+    res.redirect("/authorization/login");
 
 });
 
