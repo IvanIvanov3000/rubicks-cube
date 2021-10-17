@@ -1,11 +1,10 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
 const cubeService = require('../services/cubeService');
 const accessoryService = require('../services/accessoryService');
-const SECRET = require("../constants");
 const { isAuth } = require("../middlewares/authMiddleware");
-const router = express.Router();
 
+const validator = require("validator");
+const express = require('express');
+const router = express.Router();
 const renderCreate = (req, res) => {
 
     res.render("cube/create");
@@ -13,6 +12,11 @@ const renderCreate = (req, res) => {
 const createCube = async (req, res) => {
     try {
         const { name, description, image, difficulty } = req.body;
+        if (!validator.isURL(image)) {
+            return res.status(400).send("Invalid url");
+        }
+
+
         await cubeService.create(name, description, image, difficulty);
         res.redirect("/");
     } catch (err) {
