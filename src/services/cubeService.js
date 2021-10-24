@@ -13,12 +13,13 @@ const search = async (text, from, to) => {
     );
     return filtered;
 }
-const create = (name, description, imageUrl, difficulty) => {
+const create = (name, description, imageUrl, difficulty, creatorId) => {
     return Cube.create({
         name,
         description,
         imageUrl,
         difficulty,
+        creator: creatorId
     });
 }
 const attachAccessory = async (cubeId, accessoryId) => {
