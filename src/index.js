@@ -14,7 +14,6 @@ initHandlebars(app);
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(auth);
-
 app.use(express.static(path.join(__dirname, './public')));
 
 
